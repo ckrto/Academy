@@ -1,0 +1,175 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <title>앨범목록</title>
+        <style>
+            * {
+                margin: 0px auto;
+                padding: 0px auto;
+            }
+            body {
+                width: 960;
+                margin: 0px auto;
+            }
+            #middle {
+                padding: 20px;
+                text-align: center;
+            }
+            #bottom {
+                margin-top: 20px;
+                padding-top: 20px;
+                text-align: center;
+                border-top: 5px solid gray;
+            }
+            table {
+                border-collapse: collapse;
+                margin: 0px auto;
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+            td {
+                border-bottom: 1px solid purple;
+                padding: 15px;
+            }
+            .title {
+                background: purple;
+                color: white;
+                text-align: center;
+            }
+            .row:hover {
+                font-weight: bold;
+                cursor: pointer;
+            }
+            button {
+                background: purple;
+                color: white;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            button:disabled {
+                background: gray;
+            }
+            #info {
+                margin: 0px auto;
+                margin-top: 30px;
+                text-align: left;
+            }
+            #photos {
+                width: 800px;
+                overflow: hidden;
+            }
+            .box {
+                width: 150px;
+                float: left;
+                margin-left: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="top">
+            <img src = "https://via.placeholder.com/960x150">
+        </div>
+        <div id="middle">
+            <h1>앨범 목록</h1>
+            <table id="albums"></table>
+            <script id="temp" type="text/x-handlebars-template">
+                <tr class="title">
+                    <td width="50">No.</td>
+                    <td width="750">Title</td>
+                </tr>
+                {{#each .}}
+                <tr class="row" id="{{id}}" title="{{title}}">
+                    <td>{{id}}</td>
+                    <td>{{title}}</td>
+                </tr>
+                {{/each}}
+            </script>
+            <div>
+                <button id="prev">&lt;</button>
+                <span id="page">1</span>
+                <button id="next">&gt;</button>
+            </div>
+            <div id="info"></div>
+
+            <div id="photos"></div>
+            <script id="temp1" type="text/x-handlebars-template">
+                {{#each .}}
+                <div class="box">
+                    <img src="{{thumbanilUrl}}" width="150">
+                    <div class="title"></div>
+                </div>
+                {{/each}}
+            </script>
+        </div>
+        <div id="bottom">
+            <h3>Copyright 2022. 인천일보아카데미 All rights Reserved. </h3>
+        </div>
+    </body>
+    <script>
+        page = 1;
+        perPage = 5;
+        getList();
+
+        $("#albums").on("click", ".row", function() {
+            id=$(this).attr("id");
+            title=$(this).attr("title");
+            html = "<h3>" + id + ". " + title + "</h3>";
+            $("#info").html(html);
+
+            $.ajax ({
+                type : "get",
+                url : "https://jsonplaceholder.typicode.com/photos?albumId=" + id,
+                dataType : "json",
+                success : function(data) {
+                    temp = Handlebars.compile($("#temp1").html());
+                    $("#photos").html(temp(data));
+                }
+            })
+        })
+
+        function getList() {
+            $.ajax ({
+                type : "get",
+                url : "https://jsonplaceholder.typicode.com/albums",
+                dataType : "json",
+                success : function(data) {
+                    rows = [];
+                    $(data).each(function() {
+                        start = (page-1) * perPage + 1;
+                        end = page * perPage;
+                        if(this.id > start && this.id <= end) {
+                            row = {id:this.id, title:this.title};
+                            rows.push(row);
+                        }
+                    })
+                    temp = Handlebars.compile($("#temp").html());
+                    $("#albums").html(temp(rows));
+                    lastPage = Math.ceil(100/perPage);
+                    if(page==1) {
+                        $("#prev").attr("disabled", true);
+                    } else {
+                        $("#prev").attr("disabled", false);
+                    }
+                    if(page==lastPage) {
+                        $("#next").attr("disabled", true);
+                    } else {
+                        $("#next").attr("disabled", false);
+                    }
+                    $("#page").html(page+"/"+lastPage);
+                }
+            })
+        }
+        $("#next").on("click", function() {
+            page++;
+            getList();
+        })
+
+        $("#prev").on("click", function() {
+            page--;
+            getList();
+        })
+    </script>
+</html>

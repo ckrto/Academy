@@ -1,0 +1,204 @@
+<html>
+    <head>
+        <title>느그비트</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+            body {
+                width: 960px;
+                margin: 0px auto;
+                
+            }
+            #top {
+
+            }
+            #middle {
+                
+                padding-top: 10px;
+            }
+            #new, #best {
+                margin: 20px 0px;
+                overflow: hidden;
+            }
+            #new .box, #best .box {
+                width: 150px;
+                height: 200px;
+                float: left;
+                margin-top: 10px;
+                margin-right: 21px;
+                margin-left: 18px;
+                text-align: center;
+                
+            }
+            #new .box:last-child {
+                margin-right: 0px;
+            }
+            
+            #list {
+                overflow: hidden;
+            }
+            #list .box {
+                width: 220px;
+                height: 270px;
+                float: left;
+                margin-top: 10px;
+                margin-right: 8px;
+                margin-left: 8px;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+            #list .box:last-child {
+                margin-right: 0px;
+            }
+            #bottom {
+                text-align: center;
+                border-top: 3px solid gray;
+                margin-top: 30px;
+                padding-top: 20px;
+            }
+            #menu span {
+                font-size: 25px;
+                padding-right: 20px;
+            }
+            #menu span:hover {
+                color: green;
+                cursor: pointer;
+            }
+            img {
+                margin-bottom: 40px;
+            }
+            .price {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="top">
+            <img src="images.jpg" width="960" height="200">
+        </div>
+        <div id="middle">
+            <div id="menu">
+                <span id="btnNew">신규 상장 코인</span>
+                <span id="btnBest">TOP 종목</span>
+            </div>
+            <div id="new">
+            <script id="newTemp" type="text/x-handlebars-template">
+                {{#each .}}
+                    <div class="box">
+                        <img src="{{image}}" width="120">
+                        <div class="title">{{title}}</div>
+                    </div>
+                {{/each}}
+            </script>
+            </div>
+            <div id="best">
+                <script id="newTemp" type="text/x-handlebars-template">
+                    {{#each .}}
+                        <div class="box">
+                            <img src="{{image}}" width="120">
+                            <div class="title">{{title}}</div>
+                        </div>
+                    {{/each}}
+                </script>
+            </div>
+            <div id="list">
+                <script id="listTemp" type="text/x-handlebars-template">
+                    {{#each .}}
+                        <div class="box">
+                            <img src="{{image}}" width="100">
+                            <div class="title">{{title}}</div>
+                            <div class="price">{{price}}</div>
+                        </div>
+                    {{/each}}
+                </script>
+            </div>
+        </div>
+        <div id="bottom">
+            <h3>Copyright 2022. 인천일보 아카데미. All right reserved.</h3>
+        </div>
+    </body>
+    <script>
+        $("#best").hide();
+        $("#btnNew").css("border-bottom", "5px solid green");
+
+        //새로나온 책을 클릭한 경우
+        $("#btnNew").on("click", function(){
+            $("#new").show();
+            $("#best").hide();
+            $(this).css("border-bottom", "5px solid green");
+            $("#btnBest").css("border", "none");
+        });
+
+        //베스트 셀러를 클릭한 경우
+        $("#btnBest").on("click", function(){
+            $("#best").show();
+            $("#new").hide();
+            $(this).css("border-bottom", "5px solid green");
+            $("#btnNew").css("border", "none");
+        });
+
+        newData = [
+            {"image" : "SOL.png",
+             "title" : "SOL"},
+            {"image" : "STPT.png",
+             "title" : "STPT"},
+            {"image" : "BORA.png",
+             "title" : "BORA"},
+            {"image" : "MFT.png",
+             "title" : "MFT"},
+            {"image" : "TRX.png",
+             "title" : "TRX"}
+        ];
+
+        bestData = [
+            {"image" : "ADA.png",
+             "title" : "ADA"},
+            {"image" : "SAND.png",
+             "title" : "SAND"},
+            {"image" : "WAVES.png",
+             "title" : "WAVES"},
+            {"image" : "SRM.png",
+             "title" : "SRM"},
+            {"image" : "XRP.png",
+             "title" : "XRP"},
+            
+        ];
+        
+        newTemp = Handlebars.compile($("#newTemp").html());
+        $("#new").html(newTemp(newData));
+        $("#best").html(newTemp(bestData));
+
+        listData = [
+            {"image" : "BTC.png",
+             "title" : "BTC",
+             "price" : "+1%"},
+             {"image" : "ETH.png",
+             "title" : "ETH",
+             "price" : "+5%"},
+             {"image" : "ADA.png",
+             "title" : "ADA",
+             "price" : "+5%"},
+            {"image" : "SAND.png",
+             "title" : "SAND",
+             "price" : "+5%"},
+            {"image" : "WAVES.png",
+             "title" : "WAVES",
+             "price" : "+5%"},
+            {"image" : "SRM.png",
+             "title" : "SRM",
+             "price" : "+5%"},
+            {"image" : "XRP.png",
+             "title" : "XRP",
+             "price" : "+5%"},
+             {"image" : "AXS.png",
+             "title" : "AXS",
+             "price" : "+10%"}
+        ];
+        listTemp = Handlebars.compile($("#listTemp").html());
+        $("#list").html(listTemp(listData));
+    </script>
+</html>

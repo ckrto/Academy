@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>입력 양식 태그</title>
+</head>
+<body>
+    <form>
+        <table border="1" width = 500>
+            <tr>
+                <td>이름 : </td>
+                <td><input type = "text" name = "name" value="이름을 입력해주세요."/></td>
+            </tr>
+            <tr>
+                <td>주소 : </td>
+                <td><input type = "text" name = "address" value="주소를 입력해주세요."/> </td>
+            </tr>
+            <tr>
+                <td>성별</td>
+                <td>
+                    <input type = "radio" name = "gender" value = "M">남자
+                    <input type = "radio" name = "gender" value = "F">여자
+                </td>
+                <tr>
+                    <td>취미</td>
+                    <td>
+                        <input type = "checkbox" name="hobby1" value = "영화감상">영화감상
+                        <input type = "checkbox" name="hobby2" value = "운동">운동
+                        <input type = "checkbox" name="hobby3" value = "독서">독서
+                    </td>
+                </tr>
+                <tr>
+                    <td>직업</td>
+                    <td>
+                        <select name="job">
+                            <option hidden>직업</option>
+                            <option>군인</option>
+                            <option>프로그래머</option>
+                            <option>강사</option>
+                            <option>기타</option>
+                        </select>
+                    </td>
+                </tr>
+            </tr>    
+        </table>
+        <input type="submit" value="저장">
+        <input type="reset" value="취소">
+    </form>
+</body>
+</html>

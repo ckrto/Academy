@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>게시글</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <style>
+            table {
+                margin: 0px auto;
+                border-collapse: collapse;
+            }
+            td {
+                border: 1px solid gray;
+                padding: 10px;
+            }
+            #posts .title {
+                background: green;
+                color: white;
+                text-align: center;
+            }
+            #posts .row:hover {
+                background: gray;
+                color: white;
+            }
+            button {
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <table id="posts"></table>
+            <script id="temp" type="text/x-handlebars-template">
+                <tr class="title">
+                    <td width="50">No.</td>
+                    <td width="600">Title</td>
+                </tr>
+                {{#each .}}
+                    <tr class="row">
+                        <td>{{id}}</td>
+                        <td>{{title}}</td>
+                    </tr>
+                {{/each}}
+            </script>
+            <div style="text-align: center; margin-top: 10px;">
+                <button id="prev">◀</button>
+                <span id="page">1</span>
+                <button id="next">▶</button>
+            </div>
+    </body>
+    <script>
+        var page=1;
+        getList();
+        $("#next").on("click", function() {
+            page++;
+            getList();
+        })
+
+        $("#prev").on("click", function() {
+            page--;
+            getList();
+        })
+
+        function getList() {     
+            $.ajax ({
+                type : "get",
+                url : "https://jsonplaceholder.typicode.com/posts",
+                dataType : "json",
+                success : function (data) {
+                    var rows = [];
+                    var start = (page-1) * 10 + 1;
+                    var last = page  *10;
+
+                    $(data).each(function() {
+                        if(this.id>=start && this.id <= last) {
+                            var row = {"id" : this.id, "title" : this.title};
+                            rows.push(row);
+                        }
+                    });
+
+                    var temp=Handlebars.compile($("#temp").html());
+                    $("#posts").html(temp(rows));
+                    $("#page").html(page);
+                }
+            });
+        }
+    </script>
+</html>

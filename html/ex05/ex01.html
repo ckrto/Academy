@@ -1,0 +1,142 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <title>사용자 목록</title>
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+            body {
+                width: 960px;
+                margin: 1px auto;
+            }
+            #middle {
+                margin: 30px 0px;
+                text-align: center;
+            }
+            #bottom {
+                text-align: center;
+                border-top: 5px solid gray;
+                padding: 30px 0px;
+            }
+            table {
+                margin: 0px auto;
+                margin-top: 30px;
+                border-collapse: collapse;
+            }
+            td {
+                border-bottom: 1px solid green;
+                padding: 5px 10px;
+            }
+            table .title {
+                background: green;
+                color: white;
+            }
+            table .row:hover {
+                background: gray;
+                color: white;
+                cursor: pointer;
+            }
+            #info {
+                margin: 20px 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="top">
+            <img src = "https://via.placeholder.com/960x150">
+        </div>
+
+        <div id="middle">
+            <h1>사용자 목록</h1>
+            <table id="users"></table>
+            <script id="temp" type="text/x-handlebars-template">
+                <tr class="title">
+                    <td width="50">No.</td>
+                    <td width="200">Name</td>
+                    <td width="100">User Name</td>
+                    <td width="200">Email</td>
+                </tr>
+                {{#each .}}
+                <tr class="row" id="{{id}}">
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                    <td>{{username}}</td>
+                    <td>{{email}}</td>
+                </tr>
+                {{/each}}
+            </script>
+            <div id="info"></div>
+            <script id="temp1" type="text/x-handlebars-template">
+                {{#each .}}
+                    <h3>Name : {{name}}</h3>
+                    <h3>Address : {{address.street}} {{address.suite}} {{address.city}}</h3>
+                    <h3>Company : {{company.name}}</h3>
+                    <h3>Phone : {{phone}}</h3>
+                {{/each}}
+            </script>
+            <table id="todos"></table>
+            <script id="temp2" type="text/x-handlebars-template">
+                <tr class="title">
+                    <td width="50">No.</td>
+                    <td width="100">Completed</td>
+                    <td width="400">Title</td>
+                </tr>
+                {{#each .}}
+                <tr class="row">
+                    <td>{{id}}</td>
+                    <td><input type="checkbox"  {{comp completed}}></td>
+                    <td>{{title}}</td>
+                </tr>
+                {{/each}}
+            </script>
+            <script>
+                Handlebars.registerHelper("comp", function(comp) {
+                    if(comp==true) {
+                        return "checked";
+                    }
+                })
+            </script>
+        </div>
+
+        <div id="bottom">
+            <h3>Copyright 2022. 인천일보아카데미 All rights reserved.</h3>
+        </div>
+        
+    </body>
+    <script>
+        $.ajax ({
+            type : "get",
+            url : "https://jsonplaceholder.typicode.com/users",
+            dataType : "json",
+            success : function(data) {
+                temp = Handlebars.compile($("#temp").html());
+                $("#users").html(temp(data));
+            }
+        })
+        
+        $("#users").on("click", ".row", function() {
+            id = $(this).attr("id");
+            $.ajax ({
+                type : "get",
+                url : "https://jsonplaceholder.typicode.com/users?id=" + id,
+                dataType : "json",
+                success : function(data) {
+                    temp = Handlebars.compile($("#temp1").html());
+                    $("#info").html(temp(data));
+                }
+            })
+            $.ajax ({
+                type : "get",
+                url : "https://jsonplaceholder.typicode.com/todos?userId=" + id,
+                dataType : "json",
+                success : function(data) {
+                    temp = Handlebars.compile($("#temp2").html());
+                    $("#todos").html(temp(data));
+                }
+            })
+        })
+    </script>
+</html>

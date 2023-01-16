@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>자바스크립트연습</title>
+        <link rel="stylesheet" href="ex03.css"/>
+        <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+        <style>
+            @font-face {
+                font-family: seoul;
+                src: url("08SeoulNamsanB_0.ttf");
+            }
+            body {
+                font-family: seoul;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <h1>1~100까지의 합 : <span id="sum">0</span></h1>
+            <h1>1~100까지의 짝수의 합 : <span id="even">0</span></h1>
+            <h1>1~100까지의 홀수의 합 : <span id="odd">0</span></h1>
+            <h1>1~100까지의 3의 배수의 합 : <span id="sum3">0</span></h1>
+            <button id="btn">1~100 3배수의합</button>
+        </div>
+    </body>
+
+    <script>
+        $("#btn").on("click", function(){
+            sum3 = 0;
+            for(i=3; i<100; i+=3){
+                sum3 += i;
+            }
+            alert(sum3);
+            $("#sum3").html(sum3);
+        });
+        
+        sum = 0;
+        even = 0;
+        odd = 0;
+
+        for(i = 1; i <= 100; i++){
+            sum += i;
+            if(i%2==0) {
+                even += i;
+            } else if(i%2==1) {
+                odd += i;
+            }
+        }
+        console.log("sum=" +sum);
+        $("#sum").html(sum);
+        $("#even").html(even);
+        $("#odd").html(odd);
+    </script>
+</html>

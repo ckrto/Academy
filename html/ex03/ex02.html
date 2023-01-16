@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <title>홍길동의 쇼핑몰</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <style>
+            * {
+                margin: 0px; 
+                padding: 0px;
+            }
+            body {
+                width: 960px;
+                margin: 0px auto;
+            }
+            #best {
+                overflow: hidden;
+            }
+            #best .box {
+                width: 200px;
+                height: 300px;
+                float: left;
+                box-shadow: 10px 10px 10px;
+                margin: 19px;
+            }
+            #info {
+                overflow: hidden;
+            }
+            #info #notice, #info #news {
+                width: 450px;
+                height: 450px;
+                float: left;
+                margin: 14px;
+            }
+            #notice .row .title {
+                width: 350;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 20px;
+                color: gray;
+            }
+            #bottom {
+                text-align: center;
+                border-top: 5px solid gray;
+                margin: 20px 0px;
+                padding: 20px 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="top">
+            <img src="images.jpg" width="960">
+        </div>
+        <div id="middle">
+            <div id="best"></div>
+                <script id="bestTemp" type="text/x-handlebars-template">
+                    {{#each .}}
+                        <div class="box">
+                            <img src="{{image}}">
+                            <div class="title">{{title}}</div>
+                        </div>
+                    {{/each}}
+                </script>
+            <div id="info">
+                <table id="notice"></table>
+                <script id="noticeTemp" type="text/x-handlebars-template">
+                    {{#each .}}
+                        <tr class="row">
+                            <td>{{id}}</td>
+                            <td><div class="title">{{title}}</div></td>
+                        </tr>
+                    {{/each}}
+                </script>
+                <table id="news"></table>
+                <script id="newsTemp" type="text/x-handlebars-template">
+                    {{#each .}}
+                        <tr class="row">
+                            <td>{{id}}</td>
+                            <td><div class="title">{{title}}</div></td>
+                        </tr>
+                    {{/each}}
+                </script>
+            </div>
+        </div>
+        <div id="bottom">
+            <h3>Copyright 2022. 인천일보아카데미 All right reserved</h3>
+        </div>
+    </body>
+    <script>
+        var bestData = [
+            {"image" : "http://placekitten.com/200/200", 
+            title : "고양이1"},
+            {"image" : "http://placekitten.com/200/201", 
+            title : "고양이2"},
+            {"image" : "http://placekitten.com/200/202", 
+            title : "고양이3"},
+            {"image" : "http://placekitten.com/200/203", 
+            title : "고양이4"}
+        ];
+        var bestTemp=Handlebars.compile($("#bestTemp").html());
+        $("#best").html(bestTemp(bestData));
+
+        $.ajax ({
+            type : "get",
+            url : "https://jsonplaceholder.typicode.com/posts",
+            dataType : "json",
+            success : function(data) {
+                var rows = [];
+                $(data).each(function() {
+                    if(this.id <= 10) {
+                        var row = {"id" : this.id, "title" : this.title}
+                        rows.push(row);
+                    }
+                });
+
+                temp=Handlebars.compile($("#noticeTemp").html());
+                $("#notice").html(temp(rows));
+            }
+        })
+        $.ajax ({
+            type : "get",
+            url : "https://jsonplaceholder.typicode.com/albums",
+            dataType : "json",
+            success : function(data) {
+                var rows = [];
+                $(data).each(function() {
+                    if(this.id <= 10) {
+                        var row={"id" : this.id, "title" : this.title}
+                        rows.push(row);
+                    }
+                });
+                temp=Handlebars.compile($("#newsTemp").html());
+                $("#news").html(temp(rows));
+            }
+        })
+    </script>
+</html>

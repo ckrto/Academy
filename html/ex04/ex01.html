@@ -1,0 +1,185 @@
+<html>
+    <head>
+        <title>게시글</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+        <style>
+            @font-face {
+                font-family: HSS;
+                src : url("HSSantokki-Regular.ttf")
+            }
+            * {
+                margin: 0px auto;
+                padding: 0px auto;
+            }
+            body {
+                width: 960px;
+                margin: 0px auto;
+                font-family: HSS;
+            }
+            #middle {
+                text-align: center;
+                margin-top: 30px;
+            }
+            #bottom {
+                text-align: center;
+                border-top: 5px solid gray;
+                margin: 20px 0px;
+                padding: 20px 0px;
+            }
+            table {
+                border-collapse: collapse;
+                margin: 0px auto;
+                margin-bottom: 30px;
+                margin-top: 30px;
+            }
+            td {
+                border-bottom: 1px solid green;
+                padding: 5px;
+            }
+            #posts .title {
+                background: green;
+                color: white;
+                text-align: center;
+                font-size: 20px;
+            }
+            #posts .row:hover {
+                font-weight: bold;
+                cursor: pointer;
+            }
+            button {
+                background: green;
+                color: white;
+                padding: 5px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            button:disabled {
+                background: gray;
+            }
+            #info {
+                width:750px;
+                margin:0px auto;
+                margin-top:20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="top">
+            <img src="https://via.placeholder.com/960x150">
+        </div>
+        <div id="middle">
+            <h1>게시글 목록</h1>
+            <table id="posts"></table>
+            <script id="temp" type="text/x-handlebars-template">
+                <tr class="title">
+                    <td width="50">No.</td>
+                    <td width="700">Title</td>
+                </tr>
+                {{#each .}}
+                <tr class="row" id="{{id}}" title="{{title}}" body="{{body}}">
+                    <td>{{id}}</td>
+                    <td>{{title}}</td>
+                </tr>
+                {{/each}}
+            </script>
+            <div style="margin-bottom: 50px;">
+                <button id="prev">◀</button>
+                <span id="page">1</span>
+                <button id="next">▶</button>
+            </div>
+        </div>
+        <hr>
+        <div id="info"></div>
+        <script id="temp1" type="text/x-handlebars-template">
+                <h2>{{id}}. {{title}}</h2>
+                <p>{{body}}</p>
+        </script>
+        <table id="comments"></table>
+        <script id="temp2" type="text/x-handlebars-template">
+            {{#each .}}
+            <tr>
+                <td width="750">
+                    <h4>{{id}}.{{email}}</h4>
+                    <p>{{body}}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>{{body}}</td>
+            </tr>
+            {{/each}}
+        </script>
+        <div id="bottom">
+            <h3>Copyright 2022. 인천일보아카데미 All rights Reserved.</h3>
+        </div>
+        
+    </body>
+    <script>
+        var page = 1;
+        var perPage = 5;
+        getList();
+
+        $("#posts").on("click", ".row", function() {
+            id = $(this).attr("id");
+            title = $(this).attr("title");
+            body = $(this).attr("body");
+            row = {id:id, title:title, body:body};
+            temp = Handlebars.compile($("#temp1").html());
+            $("#info").html(temp(row));
+            
+            $.ajax ({
+                type : "get",
+                url : "https://jsonplaceholder.typicode.com/comments?postId=" + id,
+                dataType : "json",
+                success : function(data) {
+                    temp = Handlebars.compile($("#temp2").html());
+                    $("#comments").html(temp(data));
+                }
+            })
+        });
+
+        $("#next").on("click", function() {
+            page++;
+            getList();
+        })
+
+        $("#prev").on("click", function() {
+            page--;
+            getList();
+        })
+        function getList() {
+            $.ajax ({
+                type : "get",
+                url : "https://jsonplaceholder.typicode.com/posts",
+                dataType : "json",
+                success : function(result) {
+                    rows = [];
+                    $(result).each(function() {
+                        start = (page - 1) * perPage + 1;
+                        end = page * perPage;
+                        if(this.id >= start && this.id <= end) {
+                            row = {id : this.id, title : this.title, body : this.body};
+                            rows.push(row);
+                        }
+                    })
+                    temp = Handlebars.compile($("#temp").html());
+                    $("#posts").html(temp(rows));
+                    $("#page").html(page);
+                    lastPage = Math.ceil(100/perPage);
+                    if(page==1) {
+                        $("#prev").attr("disabled", true);
+                    } else {
+                        $("#prev").attr("disabled", false);
+                    }
+                    if(page==lastPage) {
+                        $("#next").attr("disabled", true);
+                    } else {
+                        $("#next").attr("disabled", false);
+                    }
+                    $("#page").html(page+"/"+lastPage)
+                }
+            })
+        }
+    </script>
+</html>

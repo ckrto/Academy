@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>입력양식</title>
+</head>
+<body>
+    <form method="post" action="ex01.html">
+        이름 : <input type ="text" name = "name" value="심청이">
+        <hr>
+        비밀번호 : <input type="password" name="pass">
+        <hr>
+        성별 : 
+        <input type="radio" name="gender" value="남자">남자
+        <input type="radio" name="gender" value="여자">여자
+        <hr>
+        취미 :
+        <input type="checkbox" name="hobby1" value="컴퓨터게임">컴퓨터게임
+        <input type="checkbox" name="hobby2" value="영화감상">영화감상
+        <input type="checkbox" name="hobby3" value="독서">독서
+        <hr>
+        직업 :
+        <select name="job">
+            <option value="군인">군인</option>
+            <option value="프로그래머">프로그래머</option>
+            <option value="의사">의사</option>
+        </select>
+        <hr>
+        메모 : 
+        <textarea cols="80" rows="5" name="meno"></textarea>
+        <hr>
+        파일선택 : <input type="file" name="file">
+        <hr>
+        <input type="submit" value="저장">
+        <input type="reset" value="취소">
+    </form>
+</body>
+</html>
