@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;AccountList.java&apos; to &apos;study/src/jframe&apos;&#x0D;&#x0A;- Original project: &apos;semi01&apos;&#x0D;&#x0A;- Destination element: &apos;study/src/jframe&apos;&#x0D;&#x0A;- Original element: &apos;semi01.AccountList.java&apos;" description="Copy compilation unit" destination="=study/src&lt;jframe" element1="/src&lt;semi01{AccountList.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1659341220770" units="1" version="1.0"/>
+</session>
