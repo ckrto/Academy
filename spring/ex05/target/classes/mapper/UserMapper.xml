@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMapper">
+
+	 <select id="list" resultType="com.example.domain.UserVO">
+	 	select * from tbl_user order by joinDate desc limit #{start},5
+ 	 </select>
+ 	 
+ 	 <select id="read" resultType="com.example.domain.UserVO">
+	 	select * from tbl_user where uid=#{uid}
+ 	 </select>
+	
+	<insert id="insert">
+		insert into tbl_user(uid,upass,uname,photo) values(#{uid},#{upass},#{uname},#{photo})
+	</insert>
+	
+	<update id="update">
+		update tbl_user set uname=#{uname}, photo=#{photo} where uid=#{uid}
+	</update>
+	
+	<update id="updatePassword">
+		update tbl_user set upass=#{upass} where uid=#{uid}
+	</update>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ShopMapper">
+	 <insert id="insert">
+	 	insert into tbl_shop(code, title, image, price)
+	 	values(#{code}, #{title}, #{image}, #{price})
+	 </insert>
+	 <select id="list" resultType="com.example.domain.ShopVO">
+	 	select * from tbl_shop
+	 	order by code desc
+	 </select>
+	 <select id="read" resultType="com.example.domain.ShopVO">
+	 	select * from tbl_shop
+	 	where code=#{code}
+	 </select>
+	 <insert id="attach">
+	 	insert into tbl_shop_attach(code, image)
+	 	values(#{code}, #{image})
+	 </insert>
+	 <select id="getAttach" resultType="hashmap">
+	 	select * from tbl_shop_attach
+	 	where code=#{code}
+	 </select>
+	 <delete id="delAttach">
+	 	delete from tbl_shop_attach
+	 	where id=#{id}
+	 </delete>
+</mapper>
