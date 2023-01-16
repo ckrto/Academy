@@ -1,0 +1,16 @@
+.App {
+  width: 968px;
+  margin: 0px auto;
+  margin-top: 30px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid gray;
+}

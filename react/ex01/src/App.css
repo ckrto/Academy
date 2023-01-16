@@ -1,0 +1,31 @@
+.App {
+  text-align: left;
+  padding: 50px;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+}
+
+table {
+  margin: 0px auto;
+  border-collapse: collapse;
+}
+
+td {
+  text-align: center;
+  border-bottom: 1px solid green;
+  padding: 10px;
+}
+
+.title {
+  text-align: center;
+  background-color: green;
+  color: white;
+}
+
+.row:hover {
+  font-weight: 300;
+  cursor: pointer;
+}

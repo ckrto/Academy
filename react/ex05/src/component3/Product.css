@@ -1,0 +1,40 @@
+.box {
+    overflow: hidden;
+    border-bottom: 1px solid gray;
+    margin: 20px 0px;
+}
+
+.image {
+    width: 200px;
+    float: left;
+}
+
+.image img {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.content {
+    width: 600px;
+    float: left;
+    margin: 0px auto;
+}
+
+.content .price {
+    margin: 30px 0px;
+}
+
+.content .title {
+    margin: 30px 0px;
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn {
+    padding: 10px 10px;
+    margin-bottom: 20px;
+}

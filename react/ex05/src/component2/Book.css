@@ -1,0 +1,30 @@
+.books {
+    width: 800px;
+    overflow: hidden;
+    border-bottom: 1px solid gray;
+    padding: 10px 30px;
+    margin: 10px 0px;
+}
+
+.books.image {
+    width: 200px;
+    float: left;
+}
+
+.books .content .contents {
+    width: 500px;
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.more {
+    width: 800px;
+    margin: 0px auto;
+    text-align: center;
+    margin: 50px 0px;
+    cursor: pointer;
+}

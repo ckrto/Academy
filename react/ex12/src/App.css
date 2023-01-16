@@ -1,0 +1,39 @@
+.App {
+  width: 80%;
+  margin: 0px auto;
+}
+
+.ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+  min-height: 400px;
+  margin-bottom: 20px;
+}
+
+.sub_menu a {
+  padding-right: 30px;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: black;
+}
+
+.images .img {
+  margin: 5px;
+  position: relative;
+}
+
+.images .img .del {
+  position: absolute;
+  left: 68px;
+  top: -25px;
+  z-index: 1000;
+  cursor: pointer;
+  color: black;
+  opacity: 50%;
+}
+
+.ellipsis {
+  width: 200px;
+  padding: 0 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

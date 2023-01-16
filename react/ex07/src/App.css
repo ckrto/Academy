@@ -1,0 +1,65 @@
+body {
+  
+}
+
+.App {
+  width: 70%;
+  margin: 0px auto;
+}
+
+.slick-slide>div {
+  margin: 10px;
+}
+
+.slick-slide>div img {
+  margin: 0px auto;
+}
+
+.slick-slide>div .item {
+  position: relative;
+}
+
+.slick-slide>div .item .title {
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  color: white;
+  font-size: 2rem;
+}
+
+.menu {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.menu a {
+  margin: 10px 30px;
+  font-size: 1.5rem;
+  color: black;
+}
+
+a {
+  color: black;
+}
+
+button {
+  margin-left: 10px;
+}
+
+.formBanner {
+  width: 100%;
+  border: 1px solid gray;
+  text-align: center;
+  padding: 20px;
+}
+
+.formBanner input {
+  width: 90%;
+  margin: 10px;
+  padding: 5px;
+}
+
+.formBanner img {
+  width: 90%;
+  cursor: pointer;
+}

@@ -1,0 +1,12 @@
+.App {
+    text-align: center;
+}
+
+.menu span {
+    margin-right: 20px;
+    font-size: 20px;
+}
+
+.menu {
+    padding: 30px;
+}
