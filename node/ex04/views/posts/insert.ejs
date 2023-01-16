@@ -1,0 +1,42 @@
+<form method="post" name="frm">
+    <table width="700">
+        <tr>
+            <td style="border: 0px;">
+                <input type="text" size="90" name="title" placeholder="제목입력">
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 0px;">
+                <textarea name="body" cols="92" rows="10" placeholder="내용 입력"></textarea>
+            </td>
+        </tr>
+    </table>
+    <div style="text-align: center; margin: 0px auto; margin-top: 10px; width: 700px;">
+        <button type="submit">등록</button>
+        <button type="reset">취소</button>
+    </div>
+</form>
+<script>
+    $(frm).on("submit", function(e) {
+        e.preventDefault();
+        var title = $(frm.title).val();
+        var body = $(frm.body).val();
+
+        if(title == "") {
+            alert("제목을 입력하세요.");
+            $(frm.title).focus();
+            return;
+        }
+
+        if(body == "") {
+            alert("내용을 입력해주세요.");
+            $(frm.body).focus();
+            return;
+        }
+        if(!confirm("저장하시겠습니까?")) {
+            return;
+        } else {
+            frm.submit();
+        }
+    });
+</script>

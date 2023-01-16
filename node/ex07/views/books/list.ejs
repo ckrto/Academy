@@ -1,0 +1,112 @@
+<div>
+    전체도서수 : <span id="count"></span>건
+</div>
+<div>
+    <button onclick = "location.href='/books/insert'" style="float: right;">도서등록</button>
+</div>
+<div style="margin-top: 10px;">
+    검색 : <input type="text" placeholder="검색어" id="query">
+</div>
+<table id="books"></table>
+<script id="temp" type="text/x-handlebars-template">
+    <tr class="title">
+        <td width="50">상품코드</td>
+        <td width="100">이미지</td>
+        <td width="450">제목</td>
+        <td width="100">가격</td>
+        <td width="100">판매수량</td>
+        <td width="150">수정</td>
+    </tr>
+    {{#each list}}
+    <tr class="row">
+        <td class="code">{{code}}</td>
+        <td><img src="/books/{{image}}" width="70"></td>
+        <td>{{title}}</td>
+        <td><input style="text-align: center;" class="price" type="text" value="{{price}}" size="8"></td>
+        <td><input style="text-align: center;" class="qnt" type="text" value="{{qnt}}" size="5"></td>
+        <td><button>수정</button></td>
+    </tr>
+    {{/each}}
+</script>
+<div class="buttons" style="text-align: center; margin-top: 20px;">
+    <button id="prev">이전</button>
+    <span id="page">1/20</span>
+    <button id="next">다음</button>
+</div>
+<script>
+    var page = 1;
+    var query="";
+    getBooks();
+    
+    $("#books").on("click", ".row button", function() {
+        var row = $(this).parent().parent();
+        var code = row.find(".code").html();
+        var price = row.find(".price").val();
+        var qnt = row.find(".qnt").val();
+        if(!confirm(`코드:${code}를 수량:${qnt}, 가격:${price}로 수정하실래요?`)){
+            return;
+        } 
+        else {
+            $.ajax ({
+                type : "post",
+                url : "/books/update",
+                data : {code:code, price:price, qnt:qnt},
+                success : function() {
+                    alert("수정이 완료되었습니다.");
+                    getBooks();
+                }
+            });
+        }
+        
+    });
+
+    $("#query").on("keydown", function(e) {
+        if(e.keyCode == 13) {
+            query = $(this).val();
+            page = 1;
+            getBooks();
+        }
+    });
+
+    $("#prev").on("click", function() {
+        page--;
+        getBooks();
+    });
+
+    $("#next").on("click", function() {
+        page++;
+        getBooks();
+    });
+
+    function getBooks() {
+        $.ajax({
+            type:"get",
+            url:"/books/list.json",
+            dataType:"json",
+            data : {page : page, query : query},
+            success:function(data){
+                var temp=Handlebars.compile($("#temp").html());
+                $("#books").html(temp(data));
+
+                $("#count").html(data.count);
+
+                var last = Math.ceil(data.count/4);
+                $("#page").html(page + "/" + last);
+                
+                if(page == 1) {
+                    $("#prev").attr("disabled", true);
+                } 
+                else {
+                    $("#prev").attr("disabled", false);
+                }
+                
+                if(page == last) {
+                    $("#next").attr("disabled", true);
+                } 
+                else {
+                    $("#next").attr("disabled", false);
+                }
+            }
+        });
+    }
+</script>

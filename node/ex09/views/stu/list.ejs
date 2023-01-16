@@ -1,0 +1,77 @@
+<style>
+    .small{padding:7px; font-size: 12px;}
+</style>
+<div style="padding-left:20px;">
+    전체학생수:<span id="count"></span>
+    <button onclick="location.href='/stu/insert'" style="float:right;">학생등록</button>
+</div>
+<table id="list"></table>
+<script id="temp" type="text/x-handlebars-template">
+    <tr class="title">
+        <td width="100">학생번호</td>
+        <td width="100">학생이름</td>
+        <td width="100">소속학과</td>
+        <td width="200">생년월일</td>
+        <td width="100">학년</td>
+        <td width="100">지도교수</td>
+        <td width="100">정보수정</td>
+    </tr>
+    {{#each rows}}
+    <tr class="row">
+        <td>{{scode}}</td>
+        <td>{{sname}}</td>
+        <td>{{dept}}</td>
+        <td>{{fbirthday}}</td>
+        <td>{{year}}</td>
+        <td>{{pname}}({{advisor}})</td>
+        <td style="text-align:right;"><button class="small" code="{{scode}}">정보수정</button></td>
+    </tr>
+    {{/each}}
+</script>
+<div class="buttons">
+    <button id="prev">이전</button>
+    <span id="page">1/2</span>
+    <button id="next">다음</button>
+</div>
+<script>
+    var page=1;
+    getList();
+
+    $("#next").on("click", function(){
+        page++;
+        getList();
+    });
+
+    $("#prev").on("click", function(){
+        page--;
+        getList();
+    });
+
+    //정보수정 버튼을 클릭한 경우
+    $("#list").on("click", ".row .small", function(){
+        var code=$(this).attr("code");
+        location.href="/stu/update?scode=" + code;
+    });
+
+    function getList(){
+        $.ajax({
+            type:"get",
+            url:"/stu/list.json",
+            dataType:"json",
+            data:{page:page},
+            success:function(data){
+                var temp=Handlebars.compile($("#temp").html());
+                $("#list").html(temp(data));
+                $("#count").html(data.count);
+                var last=Math.ceil(data.count/5);
+                $("#page").html(page + "/" + last);
+
+                if(page==1) $("#prev").attr("disabled",true);
+                else $("#prev").attr("disabled",false);
+
+                if(page==last) $("#next").attr("disabled",true);
+                else $("#next").attr("disabled",false);
+            }
+        })
+    }
+</script>

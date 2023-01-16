@@ -1,0 +1,75 @@
+<style>
+    .subject {
+        width: 200px;
+    }
+</style>
+<div>
+    전체 게시글 수 : <span id="count"></span>건
+    <button onclick="location.href='/posts/insert'" style="float:right;">글쓰기</button>
+</div>
+<table id="posts"></table>
+<script id="temp" type="text/x-handlebars-template">
+    <tr class="title">
+        <td width="50">No.</td>
+        <td width="500">Title</td>
+        <td width="200">Date</td>
+        <td width="150">Writer</td>
+    </tr>
+    {{#each list}}
+    <tr class="row" onclick="location.href='/posts/read?id={{id}}'">
+        <td>{{id}}</td>
+        <td><div class="ellipsis subject">{{title}}</div></td>
+        <td>{{fdate}}</td>
+        <td>{{username}}({{userid}})</td>
+    </tr>
+    {{/each}}
+</script>
+<div style="text-align: center; margin-top: 10px;">
+    <button id="prev">이전</button>
+    <span id="page">0</span>
+    <button id="next">다음</button>
+</div>
+<script>
+    var page = 1;
+    var number = 5;
+    getList();
+
+    $("#next").on("click", function() {
+        page++;
+        getList();
+    });
+    $("#prev").on("click", function() {
+        page--;
+        getList();
+    });
+
+    function getList() {
+        $.ajax ({
+            type : "get",
+            url : "/posts/list.json",
+            data : {page:page, number:number},
+            dataType : "json",
+            success : function(data) {
+                var temp = Handlebars.compile($("#temp").html());
+                $("#posts").html(temp(data));
+                $("#count").html(data.count);
+                
+                var lastPage = Math.ceil(data.count/number);
+                $("#page").html(page + " / " + lastPage);
+                
+                if(page == 1) {
+                    $("#prev").attr("disabled", true);
+                } 
+                else {
+                    $("#prev").attr("disabled", false);
+                }
+                if(page == lastPage) {
+                    $("#next").attr("disabled", true);
+                }
+                else {
+                    $("#next").attr("disabled", false);
+                }
+            }
+        });
+    }
+</script>

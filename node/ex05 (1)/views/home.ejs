@@ -1,0 +1,110 @@
+<style>
+    #books, #best {overflow: hidden;}
+    #books .box {float:left; width:200px; height:300px;
+        margin:15px;text-align: center;}
+    #best .box {float:left; width:150px; height:300px;
+    margin:15px;text-align: center;}
+
+    #buttons {text-align:center; margin-top:10px;}
+    #condition {
+        padding:10px;border-bottom:1px dotted gray;}
+    img {cursor: pointer;}    
+</style>
+<div id="condition">
+    <input type="text" id="query" placeholder="검색어">
+    전체도서수:<span id="count"></span>건
+</div>
+<div id="books"></div>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each list}}
+        <div class="box">
+            <img src="/books/{{image}}" width="150" onclick="location.href='/books/read?code={{code}}'">
+            <div class="subject ellipsis"><b>{{code}}:</b>{{title}}</div>
+            <div class="price">{{fprice}}원</div>
+        </div>
+    {{/each}}
+</script>
+<!--페이지 이동-->
+<div id="buttons">
+    <button id="prev">이전</button>
+    <span id="page">1/20</span>
+    <button id="next">다음</button>
+</div>
+<!--베스트 도서-->
+<h2 style="border-bottom:3px solid red;margin-bottom:10px; padding-bottom:10px;">베스트도서</h2>
+<div id="best"></div>
+<script id="temp1" type="text/x-handlebars-template">
+    {{#each .}}
+        <div class="box">
+            <img src="/books/{{image}}" width="100" onclick="location.href='/books/read?code={{code}}'">
+            <div class="subject ellipsis"><b>{{code}}:</b>{{title}}</div>
+            <div class="price">{{qnt}}권</div>
+        </div>
+    {{/each}}
+</script>
+
+<script>
+    var page=1;
+    var query="";
+    getBooks();
+
+    //베스트 도서
+    $.ajax({
+        type:"get",
+        url:"/best.json",
+        dataType:"json",
+        success:function(data){
+            var temp=Handlebars.compile($("#temp1").html());
+            $("#best").html(temp(data));
+        }
+    })
+
+    //검색어 상자에서 엔터를 친 경우
+    $("#query").on("keydown", function(e){
+        if(e.keyCode==13){
+            query=$("#query").val();
+            //alert(query);
+            getBooks();
+        }
+    })
+
+    //다음 버튼을 클릭한 경우
+    $("#next").on("click", function(){
+        page++;
+        getBooks();
+    });
+
+     //이전 버튼을 클릭한 경우
+     $("#prev").on("click", function(){
+        page--;
+        getBooks();
+    });
+
+    function getBooks(){
+        $.ajax({
+            type:"get",
+            url:"/list.json",
+            dataType:"json",
+            data:{page:page, query:query},
+            success:function(data){
+                var temp=Handlebars.compile($("#temp").html());
+                $("#books").html(temp(data));
+                $("#count").html(data.count);
+                var last=Math.ceil(data.count/8);
+                $("#page").html(page + "/" + last);
+
+                if(page==1){
+                    $("#prev").attr("disabled",true);
+                }else{
+                    $("#prev").attr("disabled",false);
+                }
+
+                if(page==last){
+                    $("#next").attr("disabled",true);
+                }else{
+                    $("#next").attr("disabled",false);
+                }
+            }
+        })
+    }
+</script>

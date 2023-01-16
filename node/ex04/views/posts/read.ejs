@@ -1,0 +1,156 @@
+<style>
+    #comments, #write{
+        width: 700px;
+        margin: 0px auto;
+        margin-top: 30px;
+    }
+</style>
+<form method="post" name="frm">
+    <input type="hidden" name="id" value="<%=row.id%>">
+    <table width="700">
+        <tr>
+            <td style="border: 0px;">
+                <input value="<%=row.title%>" type="text" size="90" name="title" placeholder="제목입력">
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 0px;">
+                <textarea name="body" cols="92" rows="10" placeholder="내용 입력"><%=row.body%></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 0px;">작성자 : <%=row.userid%> 작성일 : <%=row.fdate%></td>
+        </tr>
+    </table>
+    <div style="text-align: center; margin: 0px auto; margin-top: 10px; width: 700px;">
+        <button type="submit">수정</button>
+        <button type="reset">취소</button>
+        <button type="button" id="delete">삭제</button>
+    </div>
+    <div id="write" style="margin-top: 20px;">
+        <textarea cols="90" rows="5" id="body"></textarea>
+        <button id="insert" type="button">저장</button>
+    </div>
+    <br/>
+    <hr/>
+    <div id="comments" style="margin-top: 20px;"></div>
+    <script id="temp" type="text/x-handlebars-template">
+        {{#each .}}
+        <div style="margin: 10px 0px;">{{username}}({{userid}})</div>
+        <textarea cols="90" rows="5" class="body">{{body}}</textarea>
+        <div class="buttons" style="width: 700px; margin-top: 10px; margin-bottom: 20px;">
+            <span class="item"><a href="{{id}}" class="update">수정</a></span>
+            <span class="item"><a href="{{id}}" class="delete">삭제</a></span>
+        </div>
+        {{/each}}
+    </script>
+</form>
+<script>
+    var postid = $(frm.id).val();
+    getComments();
+
+    $("#comments").on("click", ".update", function(e) {
+        e.preventDefault();
+        var id = $(this).attr("href");
+        var comments = $(this).parent().parent().parent();
+        var body = comments.find(".body").val();
+        if(!confirm("해당 댓글을 수정하시겠습니까?")) {
+            return;
+        } 
+        else {
+            $.ajax ({
+                type : "post",
+                url : "/comments/update",
+                data : {id:id, body:body},
+                success : function() {
+                    alert("댓글이 수정되었습니다.");
+                    getComments();
+                }
+            });
+        }
+    });
+
+    $("#comments").on("click", ".delete", function(e) {
+        e.preventDefault();
+        var id = $(this).attr("href");
+        if(!confirm("해당 댓글을 삭제하시겠습니까?")) {
+            return;
+        } 
+        else {
+            $.ajax ({
+                type : "post",
+                url : "/comments/delete",
+                data : {id:id},
+                success : function() {
+                    alert("댓글이 삭제되었습니다.");
+                    getComments();
+                }
+            });
+        }
+    })
+
+    $("#insert").on("click", function() {
+        var body = $("#body").val();
+        if(body == "") {
+            alert("댓글 내용을 입력하세요.");
+            $("#body").focus();
+            return;
+        }
+        $.ajax ({
+            type : "post",
+            url : "/comments/insert",
+            data : {postid:postid, body:body},
+            success : function() {
+                alert("댓글이 등록되었습니다.");
+                getComments();
+                $("#body").val("");
+            }
+        });
+    });
+
+    function getComments() {
+        $.ajax ({
+            type : "get",
+            url : "/comments/list.json",
+            dataType : "json",
+            data : {postid:postid},
+            success : function(data) {
+                var temp = Handlebars.compile($("#temp").html());
+                $("#comments").html(temp(data));
+            }
+        })
+    }
+    
+    $("#delete").on("click", function() {
+        if(!confirm("삭제하겠습니까?")) {
+            return;
+        } else {
+            frm.action = "/posts/delete";
+            frm.submit();
+        }
+    });
+
+    $(frm).on("submit", function(e) {
+        e.preventDefault();
+        var title = $(frm.title).val();
+        var body = $(frm.body).val();
+
+        if(title == "") {
+            alert("제목을 입력하세요.");
+            $(frm.title).focus();
+            return;
+        }
+
+        if(body == "") {
+            alert("내용을 입력해주세요.");
+            $(frm.body).focus();
+            return;
+        }
+        if(!confirm("수정하시겠습니까?")) {
+            return;
+        } else {
+            frm.action = "/posts/update";
+            frm.submit();
+        }
+    });
+</script>

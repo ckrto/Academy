@@ -1,0 +1,82 @@
+<style>
+.tag {
+    text-align: center;
+}
+</style>
+<form method="post" name="frm">
+    <table>
+        <tr>
+            <td width="100" class="tag">아이디</td>
+            <td width="700"><input type="text" name="userid" value="<%=row.userid%>" readonly class="readonly"></td>
+        </tr>
+        <tr>
+            <td class="tag">이름</td>
+            <td><input type="text" name="username" value="<%=row.username%>"></td>
+        </tr>
+        <tr>
+            <td class="tag">이메일</td>
+            <td><input type="text" name="email" value="<%=row.email%>"></td>
+        </tr>
+        <tr>
+            <td class="tag">주소</td>
+            <td><input type="text" name="address" size="60" value="<%=row.address%>"></td>
+        </tr>
+    </table>
+    <br/>
+    <div style="text-align: center; margin-top: 10px;">
+        <button type="submit">수정</button>
+        <button type="reset">취소</button>
+        <button type="button" id="delete">삭제</button>
+    </div>
+</form>
+<script>
+    $("#delete").on("click", function() {
+        if(!confirm("삭제하시겠습니까?")) {
+            return;
+        }
+        else { 
+            var userid = $(frm.userid).val();
+            $.ajax ({
+                type : "get",
+                url : "/users/count",
+                data : {userid : userid},
+                dataType : "json",
+                success : function(data) {
+                    if(data.count > 0) {
+                        alert(`${userid}이(가) 작성한 게시글이 ${data.count}개가 존재해서 삭제할 수 없습니다.`);
+                    } 
+                    else {
+                        frm.action="/users/delete";
+                        frm.submit();
+                    }
+                }
+            });
+        }
+    });
+
+    $(frm).on("submit", function(e) {
+        e.preventDefault();
+        
+        var username = $(frm.username).val();
+        var email = $(frm.email).val();
+        var address = $(frm.address).val();
+
+        if(username=="") {
+            alert("이름을 입력해주세요.");
+            $(frm.username).focus();
+            return;
+        }
+        if(email=="") {
+            alert("이메일을 입력해주세요.");
+            $(frm.email).focus();
+            return;
+        }
+
+        if(!confirm("수정하시겠습니까?")) {
+            return;
+        } else {
+            frm.action="/users/update";
+            frm.submit();
+        }
+    });
+</script>

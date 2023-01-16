@@ -1,0 +1,87 @@
+<form method="post" name="frm">
+    <table>
+        <tr>
+            <td width="100">아이디</td>
+            <td width="500"><input type="text" name="userid">
+                <button type = "button" id="check">중복체크</button>
+            </td>
+        </tr>
+        <tr>
+            <td>이름</td>
+            <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+            <td>이메일</td>
+            <td><input type="text" name="email"></td>
+        </tr>
+        <tr>
+            <td>주소</td>
+            <td><input type="text" size="50" name="address"></td>
+        </tr>
+    </table>
+    <div style="text-align:center; margin-top: 10px;">
+        <button type="submit">저장</button>
+        <button type="reset">취소</button>
+    </div>
+</form>
+
+<script>
+    var check=false;
+    $(frm).on("submit", function(e) {
+        e.preventDefault();
+        var userid = $(frm.userid).val();
+        var username = $(frm.username).val();
+        var email = $(frm.email).val();
+        var address = $(frm.address).val();
+
+        if(userid=="") {
+            alert("아이디를 입력하세요!");
+            $(frm.userid).focus();
+        } 
+        else if(username=="") {
+            alert("이름을 입력하세요!");
+            $(frm.username).focus();
+        } 
+        else if(email=="") {
+            alert("이메일을 입력하세요!");
+            $(frm.email).focus();
+        } 
+        else if(address=="") {
+            alert("주소를 입력하세요!");
+            $(frm.address).focus();
+        }
+        else {
+            if(!confirm("저장하시겠습니까?")) {
+                return;
+            }
+            frm.submit();
+        }
+    });
+
+    $("#check").on("click", function() {
+        var userid = $(frm.userid).val();
+        if(userid=="") {
+            alert("아이디를 입력하세요!");
+            $(frm.userid).focus();
+            return;
+        }
+        $.ajax ({
+            type : "get",
+            url : "/users/check",
+            dataType : "json",
+            data : {userid:userid},
+            success : function(data) {
+                if(data.count==1) {
+                    alert("이미 사용중인 아이디입니다.");
+                } else {
+                    alert("사용이 가능한 아이디입니다.");
+                    check=true;
+                }
+            }
+        });
+    });
+
+    $(frm.userid).on("change", function() {
+        check=false;
+    })
+</script>

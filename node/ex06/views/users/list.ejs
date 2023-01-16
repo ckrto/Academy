@@ -1,0 +1,47 @@
+<style>
+    .box { 
+        overflow: hidden;
+        border-bottom: 1px dotted gray;
+        margin-bottom: 10px;
+    }
+
+    .left {
+        width: 400px; float: left;
+
+    }
+    .right {
+        width: 500px; float: left;
+    }
+</style>
+<div id="users"></div>
+<script id="temp" type="text/x-Handlebars-template">
+    {{#each .}}
+        <div class="box">
+            <div class="left">
+                <img src="/photo/{{photo}}" width="200">
+            </div>
+            <div class="right">
+                <h3>{{userid}}({{username}})</h3>
+                <h4>{{email}}</h4>
+                <h3>{{address}}</h3>
+                <button userid="{{userid}}">정보수정</button>
+            </div>
+        </div>
+    {{/each}}
+</script>
+<script>
+    $("#users").on("click", ".box .right button", function() {
+        var userid = $(this).attr("userid");
+        location.href = "/users/read?userid=" + userid;
+    });
+
+    $.ajax ({
+        type : "get",
+        url : "/users/list.json",
+        dataType : "json",
+        success : function(data) {
+            var temp = Handlebars.compile($("#temp").html());
+            $("#users").html(temp(data));
+        }
+    });
+</script>

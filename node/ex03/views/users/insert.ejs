@@ -1,0 +1,98 @@
+<style>
+    .tag {
+        text-align: center;
+    }
+</style>
+<form method="post" name="frm">
+    <table>
+        <tr>
+            <td class ="tag" width="100">아이디</td>
+            <td width="700"><input type="text" name="userid">
+                <button type="button" id="check">중복체크</button>
+            </td>
+        </tr>
+        <tr>
+            <td class ="tag">이름</td>
+            <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+            <td class ="tag">이메일</td>
+            <td><input type="text" name="email"></td>
+        </tr>
+        <tr>
+            <td class ="tag">주소</td>
+            <td><input type="text" name="address" size="60"></td>
+        </tr>
+    </table>
+    <br/>
+    <div style="text-align: center; margin-top: 10px;">
+        <button type="submit">저장</button>
+        <button type="reset">취소</button>
+    </div>
+</form>
+<script>
+    var isCheck = false;
+    $("#check").on("click", function() {
+        var userid = $(frm.userid).val();
+        if(userid == "") {
+            alert("아이디를 입력하세요!");
+            $(frm.userid).focus();
+            return;
+        }
+        $.ajax ({
+            type : "get",
+            url : "/users/check",
+            dataType : "json",
+            data : {userid:userid},
+            success : function(data) {
+                if(data.count==1) {
+                    alert("이미 사용중인 아이디입니다.");
+                } else {
+                    alert("사용이 가능한 아이디입니다.");
+                    ischeck=true;
+                }
+            }
+        });
+    });
+
+    $(frm).on("submit", function(e) {
+        e.preventDefault();
+        var userid = $(frm.userid).val();
+        var username = $(frm.username).val();
+        var email = $(frm.email).val();
+        var address = $(frm.address).val();
+
+        if(userid=="") {
+            alert("아이디를 입력해주세요.");
+            $(frm.userid).focus();
+            return;
+        }
+        if(isCheck==false) {
+            alert("중복체크를 하세요!");
+            return;
+        }
+        if(username=="") {
+            alert("이름을 입력해주세요.");
+            $(frm.username).focus();
+            return;
+        }
+        if(email=="") {
+            alert("이메일을 입력해주세요.");
+            $(frm.email).focus();
+            return;
+        }
+
+        if(!confirm("저장하시겠습니까?")) {
+            return;
+        }
+        else {
+            frm.submit();
+        }
+
+    });
+
+    $(frm.userid).on("change", function() {
+        ischeck = false;
+    });
+
+</script>

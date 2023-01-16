@@ -1,0 +1,38 @@
+<style>
+    #info {
+        width: 900px;
+        overflow: hidden;
+        margin-top: 30px;
+    }
+
+    #left {
+        width: 450px;
+        float: left;
+    }
+
+    #right{
+        width: 450px;
+        float: left;
+    }
+
+    hr, h3 {
+        margin: 20px 0px;
+    }
+
+    p{
+        font-size: 20px;
+        margin: 10px 0px;
+    }
+
+</style>
+
+<div style="overflow: hidden;">
+    <div id="left"><img src="/books/<%=book.image%>"></div>
+    <div id="right">
+        <h2><%=book.title%></h2><hr/>
+        <p>가격 : <%= book.fprice%>원</p>
+        <p>등록일 : <%= book.fdate%></p>
+        <p>판매권수 : <%= book.qnt%>권</p><hr/>
+        <p>줄거리 : <%= book.contents%></p>
+    </div>
+</div>

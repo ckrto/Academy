@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/home.css' />
+    <style>
+      .right {float:right;}
+      .userid {color:green; font-weight: bold;}
+    </style>
+  </head>
+  <body>
+    <div id="top">
+      <img src="/images/back.png" width="960">
+    </div>
+    <div id="menu">
+      <span class="item"><a href="/">Home</a></span>
+      <span class="item"><a href="/pro">교수관리</a></span>
+      <span class="item"><a href="/stu">학생관리</a></span>
+      <span class="item"><a href="/cou">강좌관리</a></span>
+    </div>
+    <div id="middle">
+      <h1><%=title%></h1>
+      <%-include(pageName)%>
+    </div>
+    <div id="bottom">
+      <h3>Copyright 2022. 인천일보아카데미 All rights reserved.</h3>
+    </div>
+  </body>
+</html>

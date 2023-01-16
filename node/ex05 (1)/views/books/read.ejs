@@ -1,0 +1,21 @@
+<style>
+    #info {padding:10px;width:900px; overflow: 
+            hidden;margin-top: 30px;}
+    #left {width:400px; float:left;padding:10px;}
+    #right{width:450px; float:left;}
+    hr,h3 {margin:20px 0px;}
+</style>
+<div id="info">
+    <div id="left">
+        <img src="/books/<%=book.image%>" width="400">
+    </div>
+    <div id="right">
+        <h2><%=book.title%></h2>
+        <hr>
+        <h3>가격: <%=book.fprice%>원</h3>
+        <h3>등록일: <%=book.fdate%></h3>
+        <h3>판매수: <%=book.qnt%>권</h3>
+        <p><%=book.contents%></p>
+        <hr>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<style>
+    #books{
+        overflow: hidden;}
+    .box{
+        float: left; width: 200px; height: 200px; margin: 10px; text-align: center;
+    }
+    .subject{
+        width: 170px; margin: 0px auto;
+    }
+    #condition{
+        padding: 10px; border-bottom: 1px dotted black;
+    }
+    img{cursor: pointer;}
+</style>
+
+<div id="condition">
+    <input type="text" id="query" placerholder="검색어">
+    전체도서수:<span id="count"></span>권
+</div>
+
+<div id="books"></div>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each list}}
+        <div class="box">
+            <img src="/books/{{image}}" width="100" onclick="location.href='/books/read?code={{code}}'"> 
+            <div class="subject ellipsis"><b>{{code}}:</b>{{title}}</div>
+            <div class="price">{{fprice}}원</div>
+        </div>
+    {{/each}}
+</script>
+<!-- 페이지 이동 -->
+<div style="text-align: center; margin-top: 10px;">
+    <button id="prev">이전</button>
+    <span id="page">1/20</span>
+    <button id="next">다음</button>
+</div>
+<script>
+    var page=1; //현재페이지
+    var query="";
+    getBooks();
+
+    //검색어 상자에서 엔터를 친 경우
+    $("#query").on("keydown",function(e){ //키보드를 눌렀을때
+        if(e.keyCode==13){      //엔터는 13번이다.
+            query=$("#query").val();
+            getBooks();
+        }
+    })
+
+    //다음버튼을 누른경우
+    $("#next").on('click',function(){
+        page++;
+        getBooks();    
+    })
+    //이전버튼을 누른경우
+    $("#prev").on('click',function(){
+        page--;
+        getBooks();    
+    })
+
+    
+    function getBooks(){
+        $.ajax({
+            type:"get",
+            url:"/list.json",
+            dataType:"json",
+            data:{page:page, query:query},
+            success:function(data){
+                var temp=Handlebars.compile($("#temp").html());
+                $("#books").html(temp(data));
+                $("#count").html(data.count);
+                var last=Math.ceil(data.count/8);
+                $('#page').html(page+"/"+last);
+
+                if(page==1){
+                    $("#prev").attr('disabled',true);
+                }
+                else{
+                    $("#prev").attr('disabled',false);
+                }
+                if(page==last){
+                    $("#next").attr('disabled',true);
+                }
+                else{
+                    $("#next").attr('disabled',false);
+                }
+                
+            }
+        })
+    }
+</script>

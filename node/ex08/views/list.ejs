@@ -1,0 +1,107 @@
+<style>
+    .reviews {
+        display: none;
+        margin: 10px 0px;
+    }
+    .review {
+        cursor: pointer;
+        color: blue;
+    }
+    .row {
+        margin: 10px 0px;
+        padding: 10px 0px;
+    }
+    .box {
+        color: gray;
+        border-bottom: 1px dotted gray;
+        margin: 20px;
+        padding: 10px 0px;
+    }
+    .del {
+        color: blue;
+        cursor: pointer;
+    }
+</style>
+<table id="books"></table>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each .}}
+    <div class="row">
+        <span>{{code}} : {{title}}</span>
+        <span class="review" code="{{code}}">리뷰</span>
+        <hr>
+        <div class="reviews" style="display: none;"></div>
+    </div>
+    {{/each}}
+</script>
+
+<script id="temp1" type="text/x-handlebars-template">
+    <h2>리뷰 보기</h2>
+    {{#each .}}
+        <div class="box">
+            <div class="header">{{userid}} | {{fdate}}</div>
+            <p>{{id}} {{text}}</p>
+            <span class="del" rid="{{id}}">삭제</span>
+        </div>
+    {{/each}}
+</script>
+
+<script>
+    getBooks();
+
+    $("#books").on("click", ".del", function() {
+        var id = $(this).attr("rid");
+        var code = $(this).attr("code");
+
+        if(!confirm("해당 리뷰를 삭제하시겠습니까?")) {
+            return;
+        }
+        else {
+            $.ajax ({
+                type : "post",
+                url : "/books/review/delete",
+                data : {id:id},
+                dataType : "json",
+                success : function() {
+                    alert("리뷰가 삭제되었습니다.");
+                    getReview(code);
+                }
+            });
+        }
+    });
+    
+    $("#books").on("click", ".row .review", function() {
+        $("#books .reviews").each(function() {
+            $(this).hide();
+        })
+        var table = $(this).parent();
+        table.find(".reviews").show();
+        var code = $(this).attr("code");
+        getReview(code);
+    });
+
+    function getBooks() {
+        $.ajax ({
+            type : "get",
+            url : "/books/list.json",
+            dataType : "json",
+            success : function(data) {
+                var temp = Handlebars.compile($("#temp").html());
+                $("#books").html(temp(data));
+            }
+        });
+    }
+
+    function getReview(code) {
+        $.ajax ({
+            type : "get",
+            url : "/books/review.json",
+            dataType : "json",
+            data : {code:code},
+            success : function(data) {
+                var temp = Handlebars.compile($("#temp1").html());
+                $(".reviews").html(temp(data));
+            }
+        });
+    }
+    
+</script>

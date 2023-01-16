@@ -1,0 +1,63 @@
+<style>
+    #news, #bests{
+        overflow: hidden; 
+        text-align: center;
+    }
+
+    h2{
+        margin-top:10px;
+    }
+
+    .box{width: 150px; float: left; margin: 21px;
+    }
+    hr{
+        margin: 10px 0px;
+        margin-bottom: 10px;
+        border: 1px dotted gray;
+    }
+</style>
+<h2>최근도서</h2>
+<div id="news"></div>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each .}}
+        <div class="box">
+            <img src="/books/{{image}}" width="150" height="200">
+            <div>{{fdate}}</div>
+            <div>신규 등록</div>
+        </div>
+    {{/each}}
+</script>
+<hr>
+<h2>베스트 도서</h2>
+<div id="bests"></div>
+<script id="temp1" type="text/x-handlebars-template">
+    {{#each .}}
+        <div class="box">
+            <img src="/books/{{image}}" width="150" height="200">
+            <div>{{qnt}}권</div>
+        </div>
+    {{/each}}
+</script>
+
+<script>
+    $.ajax({
+        type:"get",
+        url:"/books/new.json",
+        dataType:"json",
+        success:function(data){
+            var temp=Handlebars.compile($("#temp").html());
+            $("#news").html(temp(data));
+        }
+    });
+
+    $.ajax({
+        type:"get",
+        url:"/books/best.json",
+        dataType:"json",
+        success:function(data){
+            var temp=Handlebars.compile($("#temp1").html());
+            $("#bests").html(temp(data));
+        }
+    });
+
+</script>

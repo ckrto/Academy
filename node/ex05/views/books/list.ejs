@@ -1,0 +1,96 @@
+<style>
+    #books {overflow: hidden;}
+    .box {float:left; width:200px; height:300px;
+        margin:15px;text-align: center;}
+    #buttons {text-align:center; margin-top:10px;}
+    #condition {
+        padding:10px;border-bottom:1px dotted gray;}
+    img {cursor: pointer;}    
+</style>
+<div id="condition">
+    <input type="text" id="query" placeholder="검색어">
+    전체도서수:<span id="count"></span>건
+    <button style="float:right;" onclick="location.href='/books/insert'">도서등록</button>
+</div>
+<table id="books"></table>
+<script id="temp" type="text/x-handlebars-template">
+    <tr class="title">
+        <td width="50">Code</td>
+        <td width="100">Image</td>
+        <td width="400">Title</td>
+        <td width="100">Price</td>
+        <td width="100">Number</td>
+        <td width="100">Date</td>
+    </tr>
+    {{#each list}}
+    <tr class="row">
+        <td>{{code}}</td>
+        <td><img src="/books/{{image}}" width="90" onclick="location.href='/books/update?code={{code}}'"></td>
+        <td>{{title}}</td>
+        <td>{{fprice}}</td>
+        <td>{{qnt}}</td>
+        <td>{{fdate}}</td>
+    </tr>
+    {{/each}}
+</script>    
+<!--페이지 이동-->
+<div id="buttons">
+    <button id="prev">이전</button>
+    <span id="page">1/20</span>
+    <button id="next">다음</button>
+</div>
+
+<script>
+    var page=1;
+    var query="";
+    getBooks();
+
+    //검색어 상자에서 엔터를 친 경우
+    $("#query").on("keydown", function(e){
+        if(e.keyCode==13){
+            query=$("#query").val();
+            //alert(query);
+            getBooks();
+        }
+    })
+
+    //다음 버튼을 클릭한 경우
+    $("#next").on("click", function(){
+        page++;
+        getBooks();
+    });
+
+     //이전 버튼을 클릭한 경우
+     $("#prev").on("click", function(){
+        page--;
+        getBooks();
+    });
+
+    function getBooks(){
+        $.ajax({
+            type:"get",
+            url:"/list.json",
+            dataType:"json",
+            data:{page:page, query:query},
+            success:function(data){
+                var temp=Handlebars.compile($("#temp").html());
+                $("#books").html(temp(data));
+                $("#count").html(data.count);
+                var last=Math.ceil(data.count/8);
+                $("#page").html(page + "/" + last);
+
+                if(page==1){
+                    $("#prev").attr("disabled",true);
+                }else{
+                    $("#prev").attr("disabled",false);
+                }
+
+                if(page==last){
+                    $("#next").attr("disabled",true);
+                }else{
+                    $("#next").attr("disabled",false);
+                }
+            }
+        })
+    }
+</script>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/home.css' />
+  </head>
+  <body>
+    <div id="top">
+      <img src="/photo/back.jpg" width="960px">
+    </div>
+
+    <div id="menu">
+      <span class="item">
+      <a href="/">Home</a>
+      <% if(userid != null) { %>
+        <a href="/users">사용자목록</a>
+      <% } %>
+      <% if(userid == null) { %>
+        <a href="/users/login">로그인</a>
+      <% } %>
+      </span>
+      <span class="item" style="float: right;">
+        <% if(userid != null) { %>
+          <%=userid%>님
+          <a href="/users/logout">로그아웃</a>
+        <% } %>
+      </span>
+      </span>
+    </div>
+    <div id="middle">
+      <h1><%= title %></h1>
+      <%- include(pageName) %>
+    </div>
+    <div id="bottom">
+      <h3>Copyright 2022. 인천일보 아카데미 All right reserved.</h3>
+    </div>
+  </body>
+</html>

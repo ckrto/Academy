@@ -1,0 +1,21 @@
+<table id="users"></table>
+<script id="temp" type="text/x-handlebars-template">
+    {{#each .}}
+        <tr class="row">
+            <td width="100">{{userid}}</td>
+            <td width="200">{{username}}</td>
+            <td width="200">{{email}}</td>
+        </tr>
+    {{/each}}
+</script>
+<script>
+    $.ajax ({
+        type : "get",
+        url : "/users/list",
+        dataType : "json",
+        success : function(data) {
+            temp = Handlebars.compile($("#temp").html());
+            $("#users").html(temp(data));
+        }
+    });
+</script>
