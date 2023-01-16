@@ -1,0 +1,14 @@
+package model;
+
+public class PurVO {
+	private String order_id;
+	private String name;
+	private String address;
+	private String email;
+	private String tel;
+	private String pdate;
+	private String payType;
+	
+	private String status;
+
+}

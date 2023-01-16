@@ -1,0 +1,13 @@
+package model;
+
+public class CouVO {
+	private String lcode;
+	private String lname;
+	private String room;
+	private String instructor;
+	private int hours;
+	private int persons;
+	
+	private int capacity;
+	
+}

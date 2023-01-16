@@ -1,0 +1,12 @@
+package model;
+
+public class StuVO {
+	private String scode;
+	private String sname;
+	private String dept;
+	private String year;
+	private String birthday;
+	private String advisor;
+	private String pname;
+	private String pdept;
+}

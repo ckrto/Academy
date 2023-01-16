@@ -1,0 +1,232 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<style>
+	#condition {
+		overflow:hidden;
+		margin-top: 50px;
+	}
+	
+	#condition form {
+		float:left;
+	}
+	
+	#condition #right {
+		float:right;
+	}
+	
+	#condition button, .buttons button {
+		padding:5px 10px;
+	}
+	
+	#products {
+		overflow:hidden;
+	}
+	
+	#products .box {
+		width: 200px;
+		float: left;
+		margin: 10px;
+		padding: 8px;
+	}
+	
+	#products .box .name { 
+		width: 200px;
+		font-size: 15px;
+	}
+	
+	#products .box img {
+		border:2px solid green; 
+		border-radius : 10px;
+	}
+	
+	#new, #best {
+		overflow:hidden;
+	}
+	
+	#new .box, #best .box {
+		width: 150px;
+		float: left;
+		margin-left: 35px;
+		font-size: 13px;
+	}
+	
+</style>
+
+<h1>최신상품</h1>
+<div id = "new"></div>
+<script id="ntemp" type="text/x-handlebars-template">
+	{{#each array}}
+	<div class = "box" style = "text-align: center">
+		<img src = "/image/shop/{{image}}" width = 150>
+		<div class = "name ellipsis">{{prod_name}}</div>
+		<div class = "price">{{fprice}}</div>
+	</div>
+	{{/each}}
+</script>
+
+<h1 style = "margin-top: 50px;">베스트상품</h1>
+<div id = "best"></div>
+<script id="ntemp" type="text/x-handlebars-template">
+	{{#each array}}
+	<div class = "box" style = "text-align: center">
+		<img src = "/image/shop/{{image}}" width = 150>
+		<div class = "name ellipsis">{{prod_name}}</div>
+		<div class = "price">{{fprice}}</div>
+	</div>
+	{{/each}}
+</script>
+
+<h2 style = "margin-top: 50px; border-bottom: 5px solid green; width: 200px" >빠른 상품 검색</h2>
+<div  id = "condition">
+	<form name = "frm">
+		<select id = "key">
+			<option value = "prod_name">상품명</option>
+			<option value = "company">제조사</option>
+			<option value = "mall_name">판매처</option>
+		</select>
+		<input type = "text" id = "word" placeholder = "검색어">
+		<button>검색</button>
+		검색수 : <span id = "count"></span>
+	</form>
+	<div id = "right">
+		<select id = "order">
+			<option value = "price1">상품가격</option>
+			<option value = "prod_name">상품명</option>			
+			<option value = "prod_id">상품코드</option>			
+		</select>
+		<select id = "desc">
+			<option value = "asc">오름차순</option>
+			<option value = "desc">내림차순</option>
+		</select>
+	</div>
+</div>
+
+<div id = "products"></div>
+<script id="ptemp" type="text/x-handlebars-template">
+	{{#each array}}
+	<div class = "box" style = "text-align: center">
+		<img src = "/image/shop/{{image}}" width = 200>
+		<div class = "name ellipsis">{{prod_name}}</div>
+		<div class = "price">{{fprice}}<span class = "del"> ({{status del}})</span></div>
+	</div>
+	{{/each}}
+</script>
+
+<script>
+	Handlebars.registerHelper("status", function(del) {
+		if(del == '1') {
+			return "판매중지";
+		}
+		else {
+			return "판매중";
+		}
+		
+	});
+
+</script>
+
+<div class = "buttons" style = "text-align: center; margin-top: 20px;">
+	<button id = "prev">이전</button>
+	<span id = "page">1/10</span>
+	<button id = "next">다음</button>
+</div>
+
+
+
+<script>
+	var page = 1;
+	getProducts();
+	getNews();
+	getBest();
+	
+	$("#next").on("click", function() {
+		page++;
+		getProducts();
+	});
+	
+	$("#prev").on("click", function() {
+		page--;
+		getProducts();
+	});
+	
+	$(frm).on("submit", function(e) {
+		e.preventDefault();
+		page = 1;
+		getProducts();
+	});
+	
+	$("#per, #order, #desc").on("change", function() {
+		page = 1;
+		getProducts();
+	});
+	
+	function getProducts() {
+		var key = $("#key").val();
+		var word = $("#word").val();
+		var per = 8;
+		var order = $("#order").val();
+		var desc = $("#desc").val();
+		
+		$.ajax ({
+			type : "get",
+			url : "/pro/list.json",
+			dataType : "json",
+			data : {key : key, word : word, per : per, order : order, desc : desc, page : page},
+			success : function(data) {
+				var temp = Handlebars.compile($("#ptemp").html());
+				$("#products").html(temp(data));
+				$("#count").html(data.total);
+				
+				if(data.total == 0) {
+					$("#products").append("<div class = 'none' style = 'text-align: center; color: red; padding : 300px 0px;'> <h3>검색된 자료가 없습니다! </h3> </div>");
+					$(".buttons").hide();
+				} 
+				else {
+					$("#page").html(page + "/" + data.last);
+					
+					if(page == 1) {
+						$("#prev").attr("disabled", true);
+					}
+					else {
+						$("#prev").attr("disabled", false);
+					}
+					
+					if(page == data.last) {
+						$("#next").attr("disabled", true);
+					}
+					else {
+						$("#next").attr("disabled", false);
+					}
+					$(".buttons").show();
+				}
+			}
+		});
+	}
+	
+	function getNews() {
+		$.ajax ({
+			type : "get",
+			url : "/pro/list.json",
+			dataType : "json",
+			data : {key : "prod_id", word : "", per : 5, order : "prod_id", desc : "desc", page : 1},
+			success : function(data) {
+				var temp = Handlebars.compile($("#ntemp").html());
+				$("#new").html(temp(data));
+			}
+		});
+	}
+	
+	function getBest() {
+		$.ajax ({
+			type : "get",
+			url : "/pro/list.json",
+			dataType : "json",
+			data : {key : "prod_id", word : "", per : 5, order : "price1", desc : "asc", page : 1},
+			success : function(data) {
+				var temp = Handlebars.compile($("#ntemp").html());
+				$("#best").html(temp(data));
+			}
+		});
+	}
+	
+</script>

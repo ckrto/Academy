@@ -1,0 +1,9 @@
+package model;
+
+public class CartVO extends ProVO {
+	private String prod_id;
+	private int qnt;
+	
+	private int sum;
+	
+}
