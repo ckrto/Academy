@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15sp">
+    
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="여기에는 내용이 들어갑니다.여기에는 내용이 들어갑니다.여기에는 내용이 들어갑니다.여기에는 내용이 들어갑니다.여기에는 내용이 들어갑니다.여기에는 내용이 들어갑니다."
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="여기는 날짜 출력"
+        android:layout_below="@id/content"
+        />
+</RelativeLayout>

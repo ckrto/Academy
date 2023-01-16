@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#CDDC39"
+    android:padding="20sp"
+    android:layout_margin="10sp">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="50sp"
+        android:layout_height="60sp"
+        android:src="@drawable/a1"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제목"
+        android:textSize="20sp"
+        android:layout_toRightOf="@id/image"
+        android:layout_marginLeft="20sp"/>
+
+    <TextView
+        android:id="@+id/actor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="출연진"
+        android:textSize="20sp"
+        android:layout_toRightOf="@id/image"
+        android:layout_marginLeft="20sp"
+        android:layout_below="@id/title"/>
+
+</RelativeLayout>

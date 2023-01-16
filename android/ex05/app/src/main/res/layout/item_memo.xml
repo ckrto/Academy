@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10sp">
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내용이 들어가는 공간 내용이 들어가는 공간 내용이 들어가는 공간 내용이 들어가는 공간 내용이 들어가는 공간 내용이 들어가는 공간 내용이 들어가는 공간 내용이 들어가는 공간 내용이 들어가는 공간"
+        android:lines="1"
+        android:ellipsize="end"
+        android:paddingRight="20sp"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="날짜가 들어가는 공간"
+        android:layout_below="@id/content"
+        android:textSize="12sp"
+        android:textColor="#959191"/>
+
+    <CheckBox
+        android:id="@+id/chk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300sp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#3F51B5"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:gravity="center"
+    android:layout_gravity="start"
+    android:id="@+id/drawerView">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="홍길동님"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher_foreground"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="오늘도 즐거운 하루되세요!"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"/>
+</LinearLayout>

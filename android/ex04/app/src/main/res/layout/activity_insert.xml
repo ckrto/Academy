@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InsertActivity">
+
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="새로운 메모를 입력하세요"
+        android:gravity="start"
+        android:padding="20sp"/>
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3F51B5"
+        android:textColor="#FFFFFF"
+        android:text="저장하기"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:padding="15sp"
+        android:textSize="20sp"/>
+</RelativeLayout>
